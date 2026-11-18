@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#100b1b">
-  <meta name="description" content="HisokaGaym: an anime-inspired memory challenge with three difficulty levels, combos, a countdown and sound controls.">
+  <meta name="description" content="HisokaGaym: choose a theme and difficulty, memorize the preview, then match every card before time runs out.">
   <title>HisokaGaym — Memory Arena</title>
   <link rel="icon" href="./image/flip.jpg" type="image/jpeg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -14,114 +14,122 @@
   <script src="./fill.js" defer></script>
 </head>
 <body>
-  <div class="app-shell">
+  <div id="app-shell" class="app-shell" data-theme="anime">
     <header class="topbar">
       <a class="brand" href="./index.html" aria-label="HisokaGaym home">
-        <span class="brand-symbol" aria-hidden="true">♠</span>
-        <span>hisoka<span class="brand-accent">Gaym</span></span>
+        <span class="brand-mark" aria-hidden="true">♠</span>
+        <span>hisoka<span class="brand-highlight">Gaym</span></span>
       </a>
-      <div class="sound-controls" aria-label="Audio controls">
-        <button type="button" id="sfx-toggle" class="sound-button" aria-pressed="true" title="Turn sound effects on or off">🔊 <span>Effects On</span></button>
-        <button type="button" id="music-toggle" class="sound-button" aria-pressed="false" title="Turn background music on or off">♫ <span>Music Off</span></button>
+      <div class="top-actions">
+        <button type="button" id="sfx-toggle" class="sound-button" aria-pressed="true" title="Toggle sound effects">🔊 <span>Effects On</span></button>
+        <button type="button" id="music-toggle" class="sound-button" aria-pressed="false" title="Toggle background music">♫ <span>Music Off</span></button>
       </div>
     </header>
 
-    <main class="game-layout">
-      <section class="intro-panel" aria-labelledby="intro-title">
-        <p class="eyebrow">WELCOME TO THE ARENA</p>
-        <h1 id="intro-title">Train your <span>memory.</span><br>Beat the clock.</h1>
-        <p class="intro-copy">Flip the cards, find every matching pair, build combos and beat your personal best. Every second counts.</p>
+    <main class="main-content">
+      <section id="setup-screen" class="setup-screen" aria-labelledby="intro-title">
+        <div class="setup-content">
+          <p class="eyebrow">WELCOME TO THE MEMORY ARENA</p>
+          <h1 id="intro-title">Train your <span>memory.</span> Beat the clock.</h1>
+          <p class="setup-subtitle">Pick your world and challenge level. You'll see every picture before they flip, so memorize their positions!</p>
 
-        <div class="levels">
-          <h2>Choose your level</h2>
-          <div class="level-options" role="group" aria-label="Difficulty">
-            <button type="button" class="level-option is-active" data-level="easy" aria-pressed="true">
-              <span class="level-name">Easy</span><small>4 pairs · 90s</small>
-            </button>
-            <button type="button" class="level-option" data-level="medium" aria-pressed="false">
-              <span class="level-name">Medium</span><small>6 pairs · 110s</small>
-            </button>
-            <button type="button" class="level-option" data-level="hard" aria-pressed="false">
-              <span class="level-name">Hard</span><small>8 pairs · 140s</small>
-            </button>
+          <div class="setup-group">
+            <div class="group-heading"><h2>01 <span>Choose your theme</span></h2><span>3 unique worlds</span></div>
+            <div class="theme-grid" role="group" aria-label="Select game theme">
+              <button type="button" class="theme-option is-selected" data-theme-choice="anime" aria-pressed="true">
+                <span class="theme-art anime-art"><img src="./image/gojo.jpg" alt="" id="anime-theme-preview"></span>
+                <span class="theme-name">Anime</span>
+                <span class="theme-caption">Iconic characters · Purple</span>
+              </button>
+              <button type="button" class="theme-option" data-theme-choice="animes" aria-pressed="false">
+                <span class="theme-art animes-art"><img id="animes-theme-preview" alt="" aria-hidden="true"></span>
+                <span class="theme-name">Animes</span>
+                <span class="theme-caption">Fantasy symbols · Blue</span>
+              </button>
+              <button type="button" class="theme-option" data-theme-choice="classic" aria-pressed="false">
+                <span class="theme-art classic-art"><img id="classic-theme-preview" alt="" aria-hidden="true"></span>
+                <span class="theme-name">Classic</span>
+                <span class="theme-caption">Everyday objects · Green</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="setup-group">
+            <div class="group-heading"><h2>02 <span>Choose the challenge</span></h2><span>Remember more cards as you level up</span></div>
+            <div class="level-options" role="group" aria-label="Select difficulty">
+              <button type="button" class="level-option is-selected" data-level="easy" aria-pressed="true"><strong>Easy</strong><span>4 pairs · 90s</span></button>
+              <button type="button" class="level-option" data-level="medium" aria-pressed="false"><strong>Medium</strong><span>6 pairs · 110s</span></button>
+              <button type="button" class="level-option" data-level="hard" aria-pressed="false"><strong>Hard</strong><span>8 pairs · 140s</span></button>
+            </div>
+          </div>
+
+          <div class="setup-footer">
+            <div><p id="setup-feedback" class="setup-feedback" role="status" aria-live="polite">Loading your pictures…</p>
+              <p class="preview-hint" id="preview-hint">You'll have 5 seconds to memorize the cards before the timer starts.</p></div>
+            <button type="button" id="start-button" class="button primary-button" disabled>Start game <span aria-hidden="true">→</span></button>
           </div>
         </div>
-
-        <div class="scoreboard" aria-label="Game statistics">
-          <div class="stat"><span>Score</span><strong id="score">0</strong></div>
-          <div class="stat"><span>Moves</span><strong id="moves">0</strong></div>
-          <div class="stat"><span>Pairs</span><strong id="pairs">0/4</strong></div>
-          <div class="stat timer-stat"><span>Time left</span><strong id="timer">01:30</strong></div>
-        </div>
-        <div class="best-row">
-          <span>★ Personal best</span><strong id="best-score">—</strong>
-          <span class="combo-text" id="combo-text" aria-live="polite"></span>
-        </div>
-        <div class="progress-track" role="progressbar" id="match-progress" aria-label="Matching progress" aria-valuemin="0" aria-valuemax="4" aria-valuenow="0"><div id="match-progress-fill"></div></div>
-        <p class="instructions">Match two cards to score <strong>100 points</strong>. Consecutive matches earn bonus points. Wrong pairs cost <strong>15 points</strong>; remaining time adds to your winning score.</p>
       </section>
 
-      <section class="play-panel" aria-labelledby="arena-title">
-        <div class="arena-header">
-          <div>
-            <p class="eyebrow">MEMORY ARENA</p>
-            <h2 id="arena-title">Find the matching pairs</h2>
+      <section id="game-screen" class="game-screen" aria-label="Memory game" hidden>
+        <div class="game-header">
+          <div class="game-identity">
+            <span id="game-theme-name">Anime</span>
+            <span class="game-divider" aria-hidden="true">/</span>
+            <span id="game-level-name">Easy</span>
           </div>
-          <span id="game-status" class="status-pill" role="status" aria-live="polite">Loading images…</span>
+          <div class="hud" aria-label="Game statistics">
+            <div class="hud-stat"><span>Score</span><strong id="score">0</strong></div>
+            <div class="hud-stat"><span>Moves</span><strong id="moves">0</strong></div>
+            <div class="hud-stat"><span>Pairs</span><strong id="pairs">0 / 4</strong></div>
+            <div class="hud-stat time-stat"><span>Time</span><strong id="timer">01:30</strong></div>
+          </div>
+          <button type="button" id="back-button" class="small-button" title="Return to theme and difficulty selection">↶ <span>Setup</span></button>
         </div>
 
-        <div class="arena-surface">
-          <div id="load-panel" class="waiting-panel">
-            <div class="waiting-icon" aria-hidden="true">♠</div>
-            <h3 id="load-title">Preparing your cards…</h3>
-            <p id="load-message">Preloading every picture so cards flip instantly.</p>
-            <div class="load-bar" role="progressbar" id="load-progress" aria-label="Image loading progress" aria-valuemin="0" aria-valuemax="9" aria-valuenow="0"><div id="load-progress-fill"></div></div>
-            <p id="load-count">0 / 9 images ready</p>
-            <button type="button" id="retry-load" class="button button-secondary" hidden>Retry loading</button>
-          </div>
-
-          <div id="ready-panel" class="waiting-panel" hidden>
-            <div class="waiting-icon ready-icon" aria-hidden="true">♥</div>
-            <h3>All cards are ready.</h3>
-            <p>Choose your difficulty and press <strong>Start game</strong> to begin.</p>
-          </div>
-
+        <div class="board-stage" id="board-stage">
+          <div class="game-status" id="game-status" role="status" aria-live="polite">Ready</div>
           <div id="card-board" class="card-board" aria-label="Memory matching cards" hidden></div>
-          <div id="pause-cover" class="pause-cover" hidden>
-            <div class="waiting-icon" aria-hidden="true">Ⅱ</div>
-            <h3>Game paused</h3>
-            <p>Your timer is stopped. Resume when you are ready.</p>
+
+          <div id="pause-cover" class="stage-cover" hidden>
+            <div class="stage-symbol">Ⅱ</div><h2>Game paused</h2><p>Your timer is stopped, and the cards are hidden.</p>
+            <button type="button" id="resume-button" class="button primary-button">Resume game</button>
+          </div>
+
+          <div id="result-panel" class="result-panel" hidden>
+            <div id="result-icon" class="result-icon" aria-hidden="true">★</div>
+            <p id="result-kicker" class="eyebrow">ROUND COMPLETE</p>
+            <h2 id="result-title">You did it!</h2>
+            <p id="result-message">Every pair matched.</p>
+            <div class="result-stats">
+              <div><span>Score</span><strong id="result-score">0</strong></div>
+              <div><span>Moves</span><strong id="result-moves">0</strong></div>
+              <div><span>Time left</span><strong id="result-time">00:00</strong></div>
+            </div>
+            <p id="result-record" class="result-record"></p>
+            <div class="result-actions">
+              <button type="button" id="play-again-button" class="button primary-button">Play again</button>
+              <button type="button" id="change-level-button" class="button secondary-button">Change theme / level</button>
+            </div>
           </div>
         </div>
 
-        <div class="game-controls">
-          <button type="button" id="start-button" class="button button-primary" disabled>Start game</button>
-          <button type="button" id="restart-button" class="button button-secondary" disabled>↻ Restart</button>
-          <button type="button" id="pause-button" class="button button-secondary" disabled>Ⅱ Pause</button>
+        <div class="game-bottom">
+          <div class="game-progress" role="progressbar" id="match-progress" aria-label="Matches completed" aria-valuemin="0" aria-valuemax="4" aria-valuenow="0">
+            <span id="match-progress-fill"></span>
+          </div>
+          <div class="game-bottom-row">
+            <div class="game-extra"><span>★ Best <strong id="best-score">—</strong></span> <span id="combo-text" aria-live="polite"></span></div>
+            <div class="game-controls">
+              <button type="button" id="restart-button" class="small-button">↻ Restart</button>
+              <button type="button" id="pause-button" class="small-button" disabled>Ⅱ Pause</button>
+            </div>
+          </div>
         </div>
-        <p class="arena-note" id="game-note" aria-live="polite">Pictures load completely before the round starts. You can mute music and effects independently.</p>
       </section>
     </main>
-    <footer class="footer">hisokaGaym <span aria-hidden="true">♣ ♥ ♠ ♦</span> · Made for memory challengers</footer>
-  </div>
 
-  <div class="result-overlay" id="result-overlay" role="dialog" aria-modal="true" aria-labelledby="result-title" aria-describedby="result-message" hidden>
-    <div class="result-card">
-      <div class="result-icon" id="result-icon" aria-hidden="true">★</div>
-      <p class="eyebrow" id="result-kicker">GAME COMPLETE</p>
-      <h2 id="result-title">You did it!</h2>
-      <p id="result-message">All pairs matched.</p>
-      <div class="result-stats">
-        <div><span>Final score</span><strong id="result-score">0</strong></div>
-        <div><span>Moves</span><strong id="result-moves">0</strong></div>
-        <div><span>Time left</span><strong id="result-time">00:00</strong></div>
-      </div>
-      <p class="result-record" id="result-record"></p>
-      <div class="result-actions">
-        <button type="button" id="play-again-button" class="button button-primary">Play again</button>
-        <button type="button" id="change-level-button" class="button button-secondary">Choose level</button>
-      </div>
-    </div>
+    <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
   </div>
 </body>
 </html>
