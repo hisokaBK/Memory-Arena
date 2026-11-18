@@ -211,7 +211,7 @@ const audio = (() => {
     else if(game.phase==="playing")startMusic();
   });
   update();
-  return{effect,stopMusic,startMusic};
+  return{effect,stopMusic,startMusic,unlock:ctx};
 })();
 
 function cancelTimers() {
@@ -376,6 +376,7 @@ function showGame() {
 function newRound() {
   const pack=game.images.get(game.theme);
   if(!pack){toast("Pictures are still loading. Please try again.","warning");return}
+  audio.unlock(); // Start/resume AudioContext synchronously within the user gesture.
   cancelTimers();
   game.score=0;game.moves=0;game.matchedPairs=0;game.combo=0;
   game.first=null;game.locked=true;game.secondsLeft=LEVELS[game.level].seconds;
