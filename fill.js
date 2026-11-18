@@ -130,6 +130,11 @@ const THEMES = {
     key,src:svgData(key,body,classicPalettes[i])
   }))}
 };
+const THEME_BACKS = {
+  anime: BACK,
+  animes: svgData("ANIMES",'<path d="M210 72L247 178L357 202L273 272L291 389L210 332L129 389L147 272L63 202L173 178Z" fill="#a9dfff" stroke="#ecf9ff" stroke-width="11"/>',["#182957","#071a39","#7aa8ff"]),
+  classic: svgData("CLASSIC",'<path d="M210 106C143 106 97 152 97 219C97 291 154 347 210 376C266 347 323 291 323 219C323 152 277 106 210 106Z" fill="#b5e4ad" stroke="#f7f9cc" stroke-width="12"/><path d="M146 237L188 277L274 173" fill="none" stroke="#245444" stroke-width="20"/>',["#265240","#0e3024","#a1e3ac"])
+};
 DOM.themePreviewAnimes.src = THEMES.animes.assets[0].src;
 DOM.themePreviewClassic.src = THEMES.classic.assets[1].src;
 
@@ -262,7 +267,7 @@ async function ensureAssets() {
   let missing=0;
   const prepared=[];
   const loadedImages=[];
-  await Promise.all([BACK,...rawAssets.map(a=>a.src)].map(async(src,i)=>{
+  await Promise.all([THEME_BACKS[theme],...rawAssets.map(a=>a.src)].map(async(src,i)=>{
     try {
       const image=await loadOne(src);
       loadedImages[i]=image;
@@ -286,7 +291,7 @@ async function ensureAssets() {
   }));
   if(token!==game.loadToken||theme!==game.theme)return;
   const assets=rawAssets.map((asset,i)=>prepared[i]||{...asset});
-  game.images.set(theme,{assets,back:prepared.back||BACK,images:loadedImages});
+  game.images.set(theme,{assets,back:prepared.back||THEME_BACKS[theme],images:loadedImages});
   DOM.start.disabled=false;
   DOM.setupFeedback.textContent=missing
     ? "✓ Ready with "+missing+" backup illustration(s). You can still play."
