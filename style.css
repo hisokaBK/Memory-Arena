@@ -1,209 +1,121 @@
-body{
-      padding: 0px;
-      margin: 0px;
-      background-color: #000000;
+*{box-sizing:border-box}
+:root{color-scheme:dark;--bg:#100b1b;--surface:rgba(23,16,36,.92);--surface-alt:rgba(35,21,53,.84);--border:rgba(198,104,239,.25);--purple:#c362f7;--pink:#f275c2;--text:#f7f0fb;--muted:#b5a2c4;--accent:#e6a6ff}
+html{min-height:100%;scroll-behavior:smooth}
+body{min-height:100vh;margin:0;background:linear-gradient(180deg,rgba(10,6,17,.85),rgba(19,8,31,.9)),url("./image/21621.jpg") center/cover fixed;color:var(--text);font:15px/1.6 "Plus Jakarta Sans",system-ui,sans-serif}
+button{font:inherit;cursor:pointer}
+button:disabled{opacity:.52;cursor:not-allowed}
+button:focus-visible,a:focus-visible{outline:3px solid #efb5ff;outline-offset:4px}
+[hidden]{display:none!important}
+.app-shell{max-width:1440px;min-height:100vh;margin:0 auto;padding:22px clamp(14px,3vw,40px) 12px}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:10px 18px 22px}
+.brand{display:inline-flex;align-items:center;gap:12px;text-decoration:none;color:var(--text);font:clamp(1.5rem,2.3vw,2.25rem)/1 "Irish Grover","Plus Jakarta Sans",sans-serif;letter-spacing:.025em}
+.brand:hover{color:#fff}
+.brand-symbol{width:48px;height:48px;display:grid;place-items:center;border:1px solid #9850ba;border-radius:15px;color:#ffd2ee;font-size:2.2rem;background:radial-gradient(circle at 30% 20%,#7430a5,#261334 65%);box-shadow:0 8px 30px #7b1fa155}
+.brand-accent{color:var(--purple)}
+.sound-controls{display:flex;gap:9px;flex-wrap:wrap}
+.sound-button{background:#21182e;border:1px solid var(--border);border-radius:999px;padding:9px 14px;color:#d6c3e4;font-size:.8rem;font-weight:750;transition:background .2s,border-color .2s}
+.sound-button.is-active{color:#ffe0f4;background:rgba(106,36,135,.4);border-color:rgba(216,127,255,.55)}
+.sound-button:hover{border-color:var(--purple);background:rgba(121,49,154,.42)}
+.game-layout{display:grid;grid-template-columns:minmax(305px,.9fr) minmax(0,1.4fr);align-items:start;gap:clamp(16px,2.4vw,32px);margin-top:10px}
+.intro-panel,.play-panel{min-width:0;border:1px solid var(--border);border-radius:26px;box-shadow:0 20px 60px rgba(0,0,0,.32);backdrop-filter:blur(16px)}
+.intro-panel{padding:clamp(20px,3vw,36px);background:linear-gradient(145deg,rgba(41,19,59,.95),rgba(17,11,29,.95))}
+.eyebrow{margin:0 0 8px;color:#d99cf7;letter-spacing:.18em;font-size:.69rem;font-weight:800}
+.intro-panel h1{font:clamp(2rem,4vw,3.8rem)/1.1 "Irish Grover","Plus Jakarta Sans",sans-serif;letter-spacing:.015em;margin:9px 0 18px;text-wrap:balance}
+.intro-panel h1 span{color:var(--pink)}
+.intro-copy{color:#c4b2d0;max-width:430px;margin:0 0 32px}
+.levels h2{font-size:.95rem;margin:0 0 13px;color:#f7e2ff}
+.level-options{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+.level-option{display:flex;flex-direction:column;gap:2px;align-items:center;justify-content:center;min-height:74px;background:rgba(24,13,38,.85);border:1px solid #554163;border-radius:13px;color:#c7b2d5;padding:10px 5px;transition:transform .16s,background .16s,border-color .16s}
+.level-option:hover{transform:translateY(-2px);border-color:#b46fd7}
+.level-option.is-active{border-color:#d785f9;background:linear-gradient(155deg,#632687,#4c225e);color:#fff;box-shadow:0 0 0 1px rgba(195,98,247,.2)}
+.level-option .level-name{font-weight:800;font-size:.89rem}
+.level-option small{font-size:.67rem;color:#bfa9cb;white-space:nowrap}
+.level-option.is-active small{color:#f0d5fb}
+.scoreboard{margin:32px 0 15px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}
+.stat{text-align:center;background:rgba(11,8,20,.58);border:1px solid #453051;border-radius:12px;padding:12px 5px 10px;min-width:0}
+.stat span{display:block;color:#a795b5;font-size:.69rem;letter-spacing:.015em;white-space:nowrap}
+.stat strong{display:block;color:var(--text);font-size:clamp(.98rem,2vw,1.45rem);font-weight:800;line-height:1.4;font-variant-numeric:tabular-nums}
+.timer-stat strong{color:#e5abff}
+.timer-stat strong.is-urgent{color:#ff8ca8;animation:pulse 1.2s ease-in-out infinite}
+@keyframes pulse{50%{opacity:.55}}
+.best-row{display:flex;align-items:center;gap:9px;flex-wrap:wrap;color:#ab94bd;font-size:.81rem}
+.best-row strong{color:#e6bbff}
+.combo-text{margin-left:auto;color:#ffc785;font-weight:800}
+.progress-track{height:8px;margin:12px 0 20px;background:#24172e;border-radius:99px;overflow:hidden}
+.progress-track div{height:100%;width:0;background:linear-gradient(90deg,#8d37c5,#f373c7);border-radius:99px;transition:width .3s}
+.instructions{margin:0;font-size:.78rem;line-height:1.75;color:#a995b9}
+.instructions strong{color:#efc9fa}
+.play-panel{padding:clamp(16px,2.8vw,32px);background:linear-gradient(160deg,rgba(24,16,37,.97),rgba(13,9,24,.97))}
+.arena-header{display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap;margin-bottom:20px}
+.arena-header h2{font:clamp(1.4rem,2.3vw,2rem)/1.15 "Irish Grover","Plus Jakarta Sans",sans-serif;margin:0}
+.status-pill{display:inline-flex;align-items:center;white-space:nowrap;padding:7px 12px;font-size:.74rem;font-weight:750;background:#302139;color:#e4c3ef;border:1px solid #6a437b;border-radius:999px}
+.status-pill.is-ready{background:#203929;color:#b2f0cb;border-color:#457c60}
+.status-pill.is-playing{background:#332038;color:#e7b1ef;border-color:#7c4283}
+.status-pill.is-win{background:#1c3e2a;color:#c5f5c8;border-color:#437c5d}
+.status-pill.is-error{background:#492234;color:#ffc0cc;border-color:#a24f6e}
+.arena-surface{position:relative;min-height:480px;background:radial-gradient(ellipse at 48% 25%,rgba(122,49,160,.18),transparent 64%),rgba(7,5,15,.45);border:1px solid rgba(197,110,238,.13);border-radius:19px;display:flex;align-items:center;justify-content:center;padding:clamp(10px,2.4vw,26px);overflow:hidden}
+.waiting-panel{text-align:center;max-width:440px;padding:45px 15px;color:#cbb5d9}
+.waiting-icon{font-size:4.3rem;font-family:"Irish Grover",sans-serif;color:#c77aff;text-shadow:0 0 30px rgba(207,97,239,.56);line-height:1.1}
+.waiting-icon.ready-icon{color:#ff93d2}
+.waiting-panel h3{margin:13px 0 9px;color:#fff;font-size:1.3rem}
+.waiting-panel p{color:#b9a7c5;margin:0 0 20px}
+.load-bar{width:min(300px,75vw);height:10px;background:#281b34;border-radius:999px;overflow:hidden;margin:0 auto 12px}
+.load-bar div{width:0;height:100%;background:linear-gradient(90deg,#9c45df,#f06ac3);transition:width .25s}
+#load-count{font-size:.8rem;color:#d2a8e6}
+.card-board{width:100%;max-width:680px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(9px,1.4vw,17px);align-self:center;align-items:center;justify-items:stretch}
+.memory-card{position:relative;display:block;width:100%;padding:0;margin:0;aspect-ratio:3/4;background:none;border:0;border-radius:15px;perspective:900px;-webkit-tap-highlight-color:transparent;touch-action:manipulation;outline-offset:5px}
+.memory-card:not(:disabled):not(.is-flipped):hover{transform:translateY(-3px)}
+.memory-card:not(:disabled):not(.is-flipped):hover .card-back{border-color:#e7a3ff;box-shadow:0 0 20px #a536bc66}
+.memory-card:disabled{opacity:1;cursor:default}
+.card-flipper{position:relative;width:100%;height:100%;display:block;transform-style:preserve-3d;transition:transform .47s cubic-bezier(.21,.63,.24,1)}
+.memory-card.is-flipped .card-flipper{transform:rotateY(180deg)}
+.card-face{position:absolute;inset:0;display:block;overflow:hidden;border:2px solid #81449a;border-radius:13px;backface-visibility:hidden;-webkit-backface-visibility:hidden;box-shadow:0 7px 19px #0006;background:#251a34}
+.card-face img{display:block;width:100%;height:100%;object-fit:cover;pointer-events:none;user-select:none}
+.card-back{background:linear-gradient(135deg,#3a1e50,#21102c)}
+.card-back:after{content:"";position:absolute;inset:0;pointer-events:none;border-radius:11px;box-shadow:inset 0 0 20px #6f218744}
+.card-front{transform:rotateY(180deg);border-color:#b879eb;background:#130e1b}
+.memory-card.is-matched .card-front{border-color:#8df4b6;box-shadow:0 0 17px #55e6a966}
+.memory-card.is-matched{filter:drop-shadow(0 0 6px #65dd8b44)}
+.card-board.is-paused{filter:blur(10px) brightness(.36);pointer-events:none}
+.pause-cover{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(8,5,15,.55);z-index:2;text-align:center;padding:20px}
+.pause-cover h3{font:2rem "Irish Grover",sans-serif;margin:10px 0 2px}
+.pause-cover p{color:#cebed7}
+.game-controls{display:flex;justify-content:center;gap:11px;flex-wrap:wrap;margin:25px 0 12px}
+.button{display:inline-flex;align-items:center;justify-content:center;min-height:45px;border-radius:12px;padding:10px 20px;font-weight:800;font-size:.9rem;transition:filter .18s,transform .18s}
+.button:not(:disabled):hover{filter:brightness(1.15);transform:translateY(-2px)}
+.button-primary{border:1px solid #ce80f2;color:#fff;background:linear-gradient(130deg,#8530ba,#bb4bdd);box-shadow:0 6px 25px #8c2bb244}
+.button-secondary{border:1px solid #77518a;color:#ead4f5;background:#2a1b3a}
+.arena-note{text-align:center;margin:0;color:#9788a4;font-size:.72rem;line-height:1.65}
+.footer{text-align:center;padding:32px 0 7px;color:#9582aa;font-size:.77rem}
+.footer span{color:#ad65d0;letter-spacing:.38em;margin-left:8px}
+.result-overlay{position:fixed;inset:0;z-index:20;background:rgba(4,2,9,.82);display:flex;align-items:center;justify-content:center;padding:18px;backdrop-filter:blur(10px)}
+.result-card{width:min(480px,100%);padding:36px 30px;background:linear-gradient(145deg,#2e173c,#150e23);border:1px solid #b66cdd;border-radius:24px;text-align:center;box-shadow:0 25px 100px #000b}
+.result-icon{font-size:3.7rem;filter:drop-shadow(0 0 22px #df66b888)}
+.result-card h2{font:clamp(1.7rem,5vw,2.8rem) "Irish Grover",sans-serif;margin:8px 0 10px;color:#fceaff}
+.result-card>p:not(.eyebrow){color:#c5b2d1}
+.result-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:25px 0 14px}
+.result-stats div{background:#261530;border:1px solid #633a72;border-radius:12px;padding:15px 6px}
+.result-stats span{display:block;color:#b59bc2;font-size:.69rem}
+.result-stats strong{display:block;color:#f0c7ff;font-size:1.25rem;font-variant-numeric:tabular-nums}
+.result-record{color:#f6b7e2!important;font-weight:700;font-size:.88rem}
+.result-actions{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:25px}
+@media(max-width:1150px){.game-layout{grid-template-columns:minmax(280px,.8fr) minmax(0,1.2fr)}.intro-panel{padding:23px}.play-panel{padding:20px}.arena-surface{min-height:430px}}
+@media(max-width:900px){.game-layout{grid-template-columns:1fr}.intro-panel{max-width:none}.intro-panel h1{font-size:2.6rem}.intro-copy{max-width:750px}.arena-surface{min-height:390px}.card-board{max-width:640px}.scoreboard{margin:22px 0 12px}}
+@media(max-width:520px){
+ .app-shell{padding:10px 10px 0}.topbar{padding:9px 6px 18px;flex-wrap:wrap;gap:12px}
+ .brand{font-size:1.75rem}.brand-symbol{width:39px;height:39px;font-size:1.9rem}
+ .sound-controls{gap:7px}.sound-button{font-size:.72rem;padding:7px 10px}
+ .game-layout{gap:13px}.intro-panel,.play-panel{border-radius:18px;padding:17px}
+ .intro-panel h1{font-size:2.2rem}.intro-copy{font-size:.84rem;margin-bottom:22px}
+ .level-options{gap:6px}.level-option{min-height:65px;padding:8px 2px}.level-option .level-name{font-size:.78rem}.level-option small{font-size:.55rem}
+ .scoreboard{gap:5px}.stat{padding:9px 2px}.stat span{font-size:.61rem}.stat strong{font-size:1.05rem}
+ .arena-header{gap:9px;margin-bottom:14px}.arena-header h2{font-size:1.35rem}
+ .status-pill{font-size:.68rem;padding:5px 8px}
+ .arena-surface{min-height:330px;padding:8px}.card-board{gap:7px}
+ .card-face{border-radius:8px;border-width:1px}.memory-card{border-radius:8px}
+ .game-controls{gap:8px;margin-top:18px}.button{padding:10px 13px;min-height:41px;font-size:.78rem}
+ .result-card{padding:28px 18px}.result-stats{gap:6px}.result-stats strong{font-size:1rem}
 }
-
-main{
-      padding: 33px;
-      margin: 0px;
-     display: flex;
-     justify-content: space-around;
-     text-align: center;
-     background: url('./image/21621.jpg') bottom center fixed;
-     background-size: 110%;
-     background-position: left 70px bottom 0px;
-
-     
-   
-     background-repeat: no-repeat;
+@media(prefers-reduced-motion:reduce){
+ *,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
 }
-
-main img{
-      height: 229px;
-      margin-bottom: -90px;
-}
-
-#scor-div{
-      padding-top: 110px;
-}
-#scor-div div{
-       background-color: #4b444f27;
-       padding: 12px;
-       padding-bottom: 63px;
-       border-radius: 90px;
-       box-shadow: 0px 0px 32px rgba(194, 179, 197, 0.269);
-}
-
-#p1{
-       width: 384px;
-       color: #ffffff80;
-       font-size: 22px;
-       font-family: "Irish Grover", system-ui;
-
-}
-
-
-main h3{
-      font-family: "Irish Grover", system-ui;
-      font-weight: 400;
-      font-size: 33px;
-      display: flex;
-      justify-content: center;
-      color: #AA04D7;
-      font-style: normal;
-      align-items: center;
-      margin-bottom: -10px;
-}   
-
-
-
-main h1{
-    padding-bottom: 18px;
-}
-.contener{
-     background-color: rgba(95, 88, 98, 0.048);
-     width: 49%;
-     padding: 23px;
-     border-radius: 34px;
-     box-shadow:0px 0px 22px #ffffff1c;
-}
-.contener div{
-      color: #AA04D7;
-      text-align: center;
-      font-family: "Irish Grover", system-ui;
-      font-weight: 400;
-      font-style: normal;
-      font-size: 9px;
-}
-.carts{
-      display: grid;
-      grid-template-columns: repeat(4,1fr);
-      grid-template-rows: repeat(4,1fr);
-      column-gap: 13px;
-      row-gap: 23px;
-      padding: 40px;
-      padding-top:12px;
-      padding-bottom: 40px;
-}
-
-.cart{
-    border: 1px solid #AA04D7;
-    margin: 0px;
-    padding: 0px;
-    border-radius: 12px;
-    height: 134px;
-}
-
-.cart:hover{
-    transition: 0.3s;
-    scale: 1.06;
-    box-shadow: 0px 0px 26px rgba(208, 27, 196, 0.619);
-    cursor: pointer;
-}
-
-.cart img{
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border-radius: 12px;
-}
-
-.Rplay{
-     text-align: center;   
-}
-
-.Rplay button{
-      color: #AA04D7;
-      text-align: center;
-      font-family: "Irish Grover", system-ui;
-      font-weight: 400;
-      font-style: normal;
-      padding: 3px;
-      padding-left: 53px;
-      padding-right: 53px;
-      background-color: rgba(0, 0, 0, 0);
-      border: 1px solid rgba(255, 255, 255, 0.422);
-      border-radius: 23px;
-      font-size: 14px;
-}
-
-.Rplay button:hover{
-      color: #ffffff;
-      background-color: #6819809a;
-      cursor: pointer;
-      
-}
-
-main #span{
-     background-color: rgba(93, 86, 86, 0.242);
-     display: inline;
-     padding-top: 6px;
-     border-radius: 23px;
-     color: #934fa6;
-     width:119px;
-     height: 43px;
-     margin-left:28px; 
-    
-}
-
-main p{
-        color: #ffffff;
-}
-
-
-/* ===== end ===== */
-.modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0,0,0,0.7);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 999;
-}
-
-.modal.hidden {
-    display: none;
-}
-
-.modal-content {
-    background-color: rgba(27, 12, 40, 0.95);
-    width: 30%;
-    color: #fff;
-    padding: 30px;
-    border-radius: 20px;
-    text-align: center;
-    font-family: "Irish Grover", system-ui;
-}
-
-.modal-content h2 {
-    font-size: 28px;
-    color: #AA04D7;
-    margin-bottom: 20px;
-}
-
-.modal-content p {
-    font-size: 18px;
-    color: #ffffffcc;
-    margin: 10px 0;
-}
-
-.modal-content button {
-    margin-top: 20px;
-    padding: 10px 25px;
-    border: none;
-    border-radius: 12px;
-    background-color: #AA04D7;
-    color: #fff;
-    font-family: "Irish Grover", system-ui;
-    cursor: pointer;
-}
-
-.modal-content button:hover {
-    background-color: #d136f7;
-}
-
