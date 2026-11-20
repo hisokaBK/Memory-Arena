@@ -4,7 +4,7 @@
 
 A responsive memory-matching game made with HTML, CSS and vanilla JavaScript.
 
-**Live:** hisokabk.github.io/Memory-Arena/
+**Live:** [🎮 Play hisokaGame](https://hisokabk.github.io/Memory-Arena/)
 
 ## How to play
 
