@@ -1,6 +1,6 @@
-![HisokaGaym Memory Arena — gameplay preview](image/hisokagaym-preview.webp)
+![hisokaGame Memory Arena — gameplay preview](image/hisokagame-preview.svg)
 
-# ♠ HisokaGaym — Memory Arena
+# ♠ hisokaGame — Memory Arena
 
 A responsive memory-matching game made with HTML, CSS and vanilla JavaScript.
 

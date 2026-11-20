@@ -29,12 +29,31 @@ const LEVELS = {
   medium: {pairs:6,seconds:110,preview:7},
   hard: {pairs:8,seconds:140,preview:9}
 };
-const BEST_KEY = "hisokagaym-memory-best-v2";
-const EFFECTS_KEY = "hisokagaym-effects";
-const MUSIC_KEY = "hisokagaym-music";
+const BEST_KEY = "hisokagame-memory-best-v2";
+const EFFECTS_KEY = "hisokagame-effects";
+const MUSIC_KEY = "hisokagame-music";
 
+// Preserve players' personal bests and audio preferences after the branding fix.
+const LEGACY_STORAGE_KEYS = {
+  [BEST_KEY]: "hisokagaym-memory-best-v2",
+  [EFFECTS_KEY]: "hisokagaym-effects",
+  [MUSIC_KEY]: "hisokagaym-music"
+};
 function safeRead(key, fallback = "") {
-  try { return localStorage.getItem(key) ?? fallback; } catch (_) { return fallback; }
+  try {
+    const value = localStorage.getItem(key);
+    if (value !== null) return value;
+    const oldKey = LEGACY_STORAGE_KEYS[key];
+    if (oldKey) {
+      const oldValue = localStorage.getItem(oldKey);
+      if (oldValue !== null) {
+        localStorage.setItem(key, oldValue);
+        localStorage.removeItem(oldKey);
+        return oldValue;
+      }
+    }
+    return fallback;
+  } catch (_) { return fallback; }
 }
 function safeWrite(key, value) {
   try { localStorage.setItem(key,value); return true; } catch (_) { return false; }
@@ -275,7 +294,7 @@ async function ensureAssets() {
     }catch(e){
       if(!i) {
         // Missing back image is replaced by a generated, local SVG.
-        const fallback=svgData("HISOKAGAYM",'<path d="M210 97L287 216L210 378L133 216Z" fill="#dc9cfb" stroke="#fff" stroke-width="12"/>',["#301348","#100a22","#af72fd"]);
+        const fallback=svgData("HISOKAGAME",'<path d="M210 97L287 216L210 378L133 216Z" fill="#dc9cfb" stroke="#fff" stroke-width="12"/>',["#301348","#100a22","#af72fd"]);
         loadedImages[i]=await loadOne(fallback);
         prepared.back=fallback;
       }else {
